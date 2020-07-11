@@ -1,22 +1,109 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://zhangtyzzz.github.io/</id>
-    <title>Tianyi的博客</title>
-    <updated>2020-07-11T15:15:54.178Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://zhangtyzzz.github.io/"/>
-    <link rel="self" href="https://zhangtyzzz.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
-    <logo>https://zhangtyzzz.github.io/images/avatar.png</logo>
-    <icon>https://zhangtyzzz.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Tianyi的博客</rights>
-    <entry>
-        <title type="html"><![CDATA[背包问题总结]]></title>
-        <id>https://zhangtyzzz.github.io/post/bei-bao-wen-ti-zong-jie/</id>
-        <link href="https://zhangtyzzz.github.io/post/bei-bao-wen-ti-zong-jie/">
-        </link>
-        <updated>2020-07-11T06:31:18.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="1-0-1背包问题">1. 0-1背包问题<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>背包问题总结 | Tianyi的博客</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://zhangtyzzz.github.io//favicon.ico?v=1594480550902">
+<link rel="stylesheet" href="https://zhangtyzzz.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="1. 0-1背包问题[1]
+容量为VVV的背包，有NNN件物品，每个物品的价值分别为WiW_iWi​，占用空间为CiC_iCi​，如何放可以使价值总和最大
+状态转移方程：
+F[i,v]=max⁡{F[i−1,v],F[i−1,v−Ci]+W..." />
+    <meta name="keywords" content="动态规划" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://zhangtyzzz.github.io/">
+        <img src="https://zhangtyzzz.github.io//images/avatar.png?v=1594480550902" class="site-logo">
+        <h1 class="site-title">Tianyi的博客</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zhangtyzzz.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">背包问题总结</h2>
+            <div class="post-date">2020-07-11</div>
+            
+            <div class="post-content" v-pre>
+              <h2 id="1-0-1背包问题">1. 0-1背包问题<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
 <p><strong>容量为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span></span></span></span>的背包，有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span></span>件物品，每个物品的价值分别为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>W</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">W_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，占用空间为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>C</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">C_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，如何放可以使价值总和最大</strong><br>
 状态转移方程：</p>
 <p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mo>[</mo><mi>i</mi><mo separator="true">,</mo><mi>v</mi><mo>]</mo><mo>=</mo><mi mathvariant="normal">max</mi><mo>⁡</mo><mo>{</mo><mi>F</mi><mo>[</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo separator="true">,</mo><mi>v</mi><mo>]</mo><mo separator="true">,</mo><mi>F</mi><mo>[</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo separator="true">,</mo><mi>v</mi><mo>−</mo><msub><mi>C</mi><mi>i</mi></msub><mo>]</mo><mo>+</mo><msub><mi>W</mi><mi>i</mi></msub><mo>}</mo></mrow><annotation encoding="application/x-tex">F [ i , v ] = \operatorname { max } \{ F [ i - 1 , v ] , F [ i - 1 , v - C _ { i } ] + W _ { i } \}
@@ -146,6 +233,79 @@
 </li>
 </ol>
 </section>
-]]></content>
-    </entry>
-</feed>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://zhangtyzzz.github.io/tag/aLC45PzXU/" class="tag">
+                    动态规划
+                  </a>
+                
+              </div>
+            
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'c5267efa6b3b24868156',
+        clientSecret: '99083478ad5151132022deddd22a14f6379395e6',
+        repo: 'zhangtyzzz.github.io',
+        owner: 'zhangtyzzz',
+        admin: ['zhangtyzzz'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
