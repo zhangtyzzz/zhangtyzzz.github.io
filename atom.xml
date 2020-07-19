@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhangtyzzz.github.io/</id>
     <title>Tianyi的博客</title>
-    <updated>2020-07-19T08:54:01.861Z</updated>
+    <updated>2020-07-19T14:14:30.419Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhangtyzzz.github.io/"/>
     <link rel="self" href="https://zhangtyzzz.github.io/atom.xml"/>
@@ -10,6 +10,199 @@
     <logo>https://zhangtyzzz.github.io/images/avatar.png</logo>
     <icon>https://zhangtyzzz.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Tianyi的博客</rights>
+    <entry>
+        <title type="html"><![CDATA[Python多线程和GIL]]></title>
+        <id>https://zhangtyzzz.github.io/post/python-duo-xian-cheng-he-gil/</id>
+        <link href="https://zhangtyzzz.github.io/post/python-duo-xian-cheng-he-gil/">
+        </link>
+        <updated>2020-07-19T07:06:44.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="简单实现">简单实现</h2>
+<pre><code class="language-python">import threading
+import time
+
+
+def task1(name):
+    print('Task %s start at %s' % (name, time.ctime()))
+    time.sleep(2)
+    print(&quot;Task %s end at %s&quot; % (name, time.ctime()))
+
+
+def task2(name):
+    print('Task %s start at %s' % (name, time.ctime()))
+    time.sleep(4)
+    print(&quot;Task %s end at %s&quot; % (name, time.ctime()))
+
+
+if __name__ == '__main__':
+    t1 = threading.Thread(target=task1, args=('thread1',))  # Thread是一个类，实例化产生t1对象，这里就是创建了一个线程对象t1
+    t1.start()  # 线程执行
+    t2 = threading.Thread(target=task2, args=('thread2',))  # 这里就是创建了一个线程对象t2
+    t2.start()
+
+    print(&quot;程序结束=====================&quot;)
+</code></pre>
+<p>输出为</p>
+<blockquote>
+<p>Task thread1 start at Sun Jul 19 15:13:06 2020<br>
+Task thread2 start at Sun Jul 19 15:13:06 2020<br>
+程序结束=====================<br>
+Task thread2 end at Sun Jul 19 15:13:08 2020<br>
+Task thread1 end at Sun Jul 19 15:13:08 2020<br>
+Process finished with exit code 0</p>
+</blockquote>
+<p>“程序结束”所输出的位置并不是最后，这是因为主线程和另外两个线程是并行的，但是主线程等非守护子线程结束之后才会退出。如果希望把程序结束打印在最后，就使用join()，join的作用是等待线程结束。</p>
+<p>代码：</p>
+<pre><code class="language-python">import threading
+import time
+
+
+def task1(name):
+    print('Task %s start at %s' % (name, time.ctime()))
+    time.sleep(2)
+    print(&quot;Task %s end at %s&quot; % (name, time.ctime()))
+
+
+def task2(name):
+    print('Task %s start at %s' % (name, time.ctime()))
+    time.sleep(4)
+    print(&quot;Task %s end at %s&quot; % (name, time.ctime()))
+
+
+if __name__ == '__main__':
+    t1 = threading.Thread(target=task1, args=('thread1',))  # Thread是一个类，实例化产生t1对象，这里就是创建了一个线程对象t1
+    t1.start()  # 线程执行
+    t2 = threading.Thread(target=task2, args=('thread2',))  # 这里就是创建了一个线程对象t2
+    t2.start()
+
+    t2.join()
+    t1.join()
+    print(&quot;程序结束=====================&quot;)
+</code></pre>
+<p>输出为</p>
+<blockquote>
+<p>Task thread1 start at Sun Jul 19 15:20:46 2020<br>
+Task thread2 start at Sun Jul 19 15:20:46 2020<br>
+Task thread1 end at Sun Jul 19 15:20:48 2020<br>
+Task thread2 end at Sun Jul 19 15:20:50 2020<br>
+程序结束=====================<br>
+Process finished with exit code 0</p>
+</blockquote>
+<p>守护线程：是一种提供服务的线程，为用户线程提供服务，当所有的用户线程死掉后，会自动终止。<br>
+分别设置t1和t2为守护线程，查看输出结果。</p>
+<pre><code class="language-python">import threading
+import time
+
+
+def task1(name):
+    print('Task %s start at %s' % (name, time.ctime()))
+    time.sleep(2)
+    print(&quot;Task %s end at %s&quot; % (name, time.ctime()))
+
+
+def task2(name):
+    print('Task %s start at %s' % (name, time.ctime()))
+    time.sleep(4)
+    print(&quot;Task %s end at %s&quot; % (name, time.ctime()))
+
+
+if __name__ == '__main__':
+    t1 = threading.Thread(target=task1, args=('thread1',))  # Thread是一个类，实例化产生t1对象，这里就是创建了一个线程对象t1
+    t1.setDaemon(True) #设置t1为守护线程
+    t1.start()  # 线程执行
+    t2 = threading.Thread(target=task2, args=('thread2',))  # 这里就是创建了一个线程对象t2
+    # t2.setDaemon(True) #设置t2为守护线程
+    t2.start()
+</code></pre>
+<p>t1为守护线程时：</p>
+<blockquote>
+<p>Task thread1 start at Sun Jul 19 15:31:04 2020<br>
+Task thread2 start at Sun Jul 19 15:31:04 2020<br>
+Task thread1 end at Sun Jul 19 15:31:06 2020<br>
+Task thread2 end at Sun Jul 19 15:31:08 2020<br>
+Process finished with exit code 0</p>
+</blockquote>
+<p>t2为守护线程时:</p>
+<blockquote>
+<p>Task thread1 start at Sun Jul 19 15:30:42 2020<br>
+Task thread2 start at Sun Jul 19 15:30:42 2020<br>
+Task thread1 end at Sun Jul 19 15:30:44 2020<br>
+Process finished with exit code 0</p>
+</blockquote>
+<p>程序里设置的t2是sleep 4s，在t2为守护线程时，t1执行完毕之后，主线程直接结束了，没有等待t2结束。(注意这里没有join)<br>
+程序的运行时间从顺序执行需要的6s降低到了4s，但这是由cpu并发实现的，而非真正的多CPU并行。<br>
+<strong>什么是并发和并行</strong></p>
+<ul>
+<li>
+<p>并发：一个系统具有处理多个任务的能力<br>
+<img src="https://hackernoon.com/photos/ZbqyG0GzLmVkwsYNyBRB9kTk5DR2-83212cm" alt="" loading="lazy"><br>
+上图是一个没有并行的并发，可以同时处理收款和下单的请求，这就是并发了，但是这不是并行。</p>
+</li>
+<li>
+<p>并行：一个系统具有同时处理多个任务的能力<br>
+<img src="https://hackernoon.com/photos/ZbqyG0GzLmVkwsYNyBRB9kTk5DR2-gwnd122h" alt="" loading="lazy"><br>
+上图则是并行，由两个员工分别处理收款和下单</p>
+</li>
+</ul>
+<p>如何看出python的多线程其实是并行而不是并发呢，以下面的例子为例</p>
+<pre><code class="language-python">import threading
+import time
+
+
+def countdown():
+    x = 500000000
+    while x &gt; 0:
+        x -= 1
+
+
+# Implementation 1: Multi-threading
+def implementation_1():
+    thread_1 = threading.Thread(target=countdown)
+    thread_2 = threading.Thread(target=countdown)
+    start = time.time()
+    print('Task start')
+    thread_1.start()
+    thread_2.start()
+    thread_1.join()
+    thread_2.join()
+    print('Task use %s seconds' % (time.time() - start))
+
+
+# Implementation 2: Run in serial
+def implementation_2():
+    start = time.time()
+    print('Task start')
+    countdown()
+    countdown()
+    print('Task use %s seconds' % (time.time() - start))
+
+implementation_1()
+implementation_2()
+</code></pre>
+<p>第一种执行方式为多线程，第二种为串行，输出结果如下</p>
+<blockquote>
+<p>Task start<br>
+Task use 76.96876907348633 seconds<br>
+Task start<br>
+Task use 78.24504065513611 seconds</p>
+</blockquote>
+<p>可以看出，两种方式的时间基本没有差别，如果是真正的并行，那么多线程执行的速度应该为串行的二倍。其中的原因就在于python的GIL(Global Interpreter Lock)全局解释器锁。引入GIL的原因是为了防止多个线程同时访问某个python对象，也就是避免读写冲突。<br>
+以上面的代码为例，真正的运行方式如下:<br>
+<img src="https://hackernoon.com/photos/ZbqyG0GzLmVkwsYNyBRB9kTk5DR2-7719p12h5" alt="" loading="lazy"><br>
+线程运行前要请求GIL，当一个线程运行时，其它线程必须等待它释放GIL。线程在阻塞(比如IO阻塞)或者到达轮询时间之后会释放GIL，其它线程继续运行，所以Python的多线程在同一时间仅有一个线程在运行。那么为什么最开始的代码中时间减少了呢，因为我们使用了sleep，相当于遇到了阻塞，在等待，此时切换到另外的线程运行其它的任务，这样时可以节省时间增加性能的。</p>
+<p>因此，对于计算密集型的功能，其实用多线程反而可能影响性能，因为线程切换也是需要消耗时间和资源的，线程计算时没有等待，此时的切换是没有意义的。<br>
+对于IO密集型的任务，使用多线程效果更好。</p>
+<p>参考文章<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>https://juejin.im/post/5cc668d4f265da03904c21e7 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>https://hackernoon.com/concurrent-programming-in-python-is-not-what-you-think-it-is-b6439c3f3e6a <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[网络各层设备]]></title>
         <id>https://zhangtyzzz.github.io/post/wang-luo-ge-ceng-she-bei/</id>
