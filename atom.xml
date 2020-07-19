@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhangtyzzz.github.io/</id>
     <title>Tianyi的博客</title>
-    <updated>2020-07-12T08:18:56.132Z</updated>
+    <updated>2020-07-19T08:53:23.702Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhangtyzzz.github.io/"/>
     <link rel="self" href="https://zhangtyzzz.github.io/atom.xml"/>
@@ -11,11 +11,46 @@
     <icon>https://zhangtyzzz.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Tianyi的博客</rights>
     <entry>
+        <title type="html"><![CDATA[网络各层设备]]></title>
+        <id>https://zhangtyzzz.github.io/post/wang-luo-ge-ceng-she-bei/</id>
+        <link href="https://zhangtyzzz.github.io/post/wang-luo-ge-ceng-she-bei/">
+        </link>
+        <updated>2020-07-19T02:13:37.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="物理层">物理层</h2>
+<p><strong>中继器</strong>：在bit级别将信号放大再调整传输，防止远距离传输的信号衰减。<br>
+<strong>中继集线器</strong>：有的中继器可以提供多端口服务，这种中继器被称为中继集线器，或集线器、Hub(现在说的Hub更多指数据链路层的交换式集线器)</p>
+<h2 id="数据链路层">数据链路层</h2>
+<p><strong>网桥</strong>：可以识别数据帧，把数据帧临时存储于内存中，再重新生成新的数据帧转发给另一个网段。因为可以存储数据帧，所以可以连接传输速率不同的数据链路。通过CRC校验检查数据是否损坏，如果损坏就丢弃，避免发送给其他网段。能通过地址自学机制和过滤功能控制网络流量。<br>
+工作步骤：</p>
+<ol>
+<li>当数据帧沿着网络介质到达时，网桥会将该帧中携带的目的MAC地址与包含在它的MAC地址表进行比较</li>
+<li>如果网桥断定数据帧的目的MAC地址与源的MAC地址在同一分段，那么它就不会将数据帧转发到其他网络分段，即为过滤</li>
+<li>如果网桥断定数据帧的目的MAC地址与源的MAC地址不在同一分段，则把它转发到合适的网络分段</li>
+<li>如果目的MAC地址是网桥所不知道的，则把该数据帧广播到网络中除发送该帧的设备以往的所有设备上。这个过程称为泛洪。</li>
+</ol>
+<p><strong>交换集线器</strong>：可以算是网桥的一种，连接电缆的每个端口都可以提供网桥的功能。</p>
+<h2 id="网络层">网络层</h2>
+<p><strong>路由器</strong>：为经过的每个IP数据包选择一条最佳传输路径，并将数据有效的传输到目的节点。网桥根据MAC地址进行处理，路由根据IP地址进行处理。</p>
+<h2 id="应用层">应用层</h2>
+<p><strong>网关</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>：OSI参考模型中负责把传输层到应用的数据进行转换和转发的设备。<br>
+举例：互联网邮件与手机邮件之间的转换服务。手机邮件有时可能会与互联网邮件互不兼容，这是由于它们在表示层和应用层中的“电子邮件协议”互不相同所导致的。<br>
+那么，为什么连到互联网的电脑与手机之间能够互发电子邮件呢？如图所示，互联网与手机之间设置了一道网关。网关负责读取完各种不同的协议后，对它们逐一进行合理的转换，再将相应的数据转发出去。这样一来即使应用的是不同电子邮件的协议，计算机与手机之间也能互相发送邮件。<br>
+<img src="https://zhangtyzzz.github.io//post-images/1595148581365.png" alt="" loading="lazy"></p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>图解TCP IP <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[01背包和完全背包问题]]></title>
         <id>https://zhangtyzzz.github.io/post/01-bei-bao-he-wan-quan-bei-bao-wen-ti/</id>
         <link href="https://zhangtyzzz.github.io/post/01-bei-bao-he-wan-quan-bei-bao-wen-ti/">
         </link>
-        <updated>2020-07-11T14:28:34.000Z</updated>
+        <updated>2020-07-11T08:28:34.000Z</updated>
         <content type="html"><![CDATA[<h2 id="1-01背包问题">1. 01背包问题<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
 <p><strong>容量为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span></span></span></span>的背包，有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span></span>件物品，每个物品的价值分别为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>W</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">W_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，占用空间为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>C</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">C_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，如何放可以使价值总和最大</strong><br>
 状态转移方程：</p>

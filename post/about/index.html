@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>关于 | Tianyi的博客</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1594541928224">
+<link rel="shortcut icon" href="/favicon.ico?v=1595148795035">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -194,19 +194,19 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">1</span>
+        <span class="site-item-stat-count">2</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="">
-        <span class="site-item-stat-count">0</span>
+        <span class="site-item-stat-count">1</span>
         <span class="site-item-stat-name language" data-lan="category">分类</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="/tags/">
-        <span class="site-item-stat-count">0</span>
+        <span class="site-item-stat-count">1</span>
         <span class="site-item-stat-name language" data-lan="tag">标签</span>
       </a>
     </div>
@@ -1012,6 +1012,38 @@
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://zhangtyzzz.github.io/post/wang-luo-ge-ceng-she-bei/"" data-c="
+          &lt;h2 id=&#34;物理层&#34;&gt;物理层&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;中继器&lt;/strong&gt;：在bit级别将信号放大再调整传输，防止远距离传输的信号衰减。&lt;br&gt;
+&lt;strong&gt;中继集线器&lt;/strong&gt;：有的中继器可以提供多端口服务，这种中继器被称为中继集线器，或集线器、Hub(现在说的Hub更多指数据链路层的交换式集线器)&lt;/p&gt;
+&lt;h2 id=&#34;数据链路层&#34;&gt;数据链路层&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;网桥&lt;/strong&gt;：可以识别数据帧，把数据帧临时存储于内存中，再重新生成新的数据帧转发给另一个网段。因为可以存储数据帧，所以可以连接传输速率不同的数据链路。通过CRC校验检查数据是否损坏，如果损坏就丢弃，避免发送给其他网段。能通过地址自学机制和过滤功能控制网络流量。&lt;br&gt;
+工作步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;当数据帧沿着网络介质到达时，网桥会将该帧中携带的目的MAC地址与包含在它的MAC地址表进行比较&lt;/li&gt;
+&lt;li&gt;如果网桥断定数据帧的目的MAC地址与源的MAC地址在同一分段，那么它就不会将数据帧转发到其他网络分段，即为过滤&lt;/li&gt;
+&lt;li&gt;如果网桥断定数据帧的目的MAC地址与源的MAC地址不在同一分段，则把它转发到合适的网络分段&lt;/li&gt;
+&lt;li&gt;如果目的MAC地址是网桥所不知道的，则把该数据帧广播到网络中除发送该帧的设备以往的所有设备上。这个过程称为泛洪。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;交换集线器&lt;/strong&gt;：可以算是网桥的一种，连接电缆的每个端口都可以提供网桥的功能。&lt;/p&gt;
+&lt;h2 id=&#34;网络层&#34;&gt;网络层&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;路由器&lt;/strong&gt;：为经过的每个IP数据包选择一条最佳传输路径，并将数据有效的传输到目的节点。网桥根据MAC地址进行处理，路由根据IP地址进行处理。&lt;/p&gt;
+&lt;h2 id=&#34;应用层&#34;&gt;应用层&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;网关&lt;/strong&gt;&lt;sup class=&#34;footnote-ref&#34;&gt;&lt;a href=&#34;#fn1&#34; id=&#34;fnref1&#34;&gt;[1]&lt;/a&gt;&lt;/sup&gt;：OSI参考模型中负责把传输层到应用的数据进行转换和转发的设备。&lt;br&gt;
+举例：互联网邮件与手机邮件之间的转换服务。手机邮件有时可能会与互联网邮件互不兼容，这是由于它们在表示层和应用层中的“电子邮件协议”互不相同所导致的。&lt;br&gt;
+那么，为什么连到互联网的电脑与手机之间能够互发电子邮件呢？如图所示，互联网与手机之间设置了一道网关。网关负责读取完各种不同的协议后，对它们逐一进行合理的转换，再将相应的数据转发出去。这样一来即使应用的是不同电子邮件的协议，计算机与手机之间也能互相发送邮件。&lt;br&gt;
+&lt;img src=&#34;https://zhangtyzzz.github.io//post-images/1595148581365.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;hr class=&#34;footnotes-sep&#34;&gt;
+&lt;section class=&#34;footnotes&#34;&gt;
+&lt;ol class=&#34;footnotes-list&#34;&gt;
+&lt;li id=&#34;fn1&#34; class=&#34;footnote-item&#34;&gt;&lt;p&gt;图解TCP IP &lt;a href=&#34;#fnref1&#34; class=&#34;footnote-backref&#34;&gt;↩︎&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+">网络各层设备</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://zhangtyzzz.github.io/post/01-bei-bao-he-wan-quan-bei-bao-wen-ti/"" data-c="
