@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhangtyzzz.github.io/</id>
     <title>Tianyi的博客</title>
-    <updated>2020-08-19T06:57:41.854Z</updated>
+    <updated>2020-08-19T06:58:43.978Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhangtyzzz.github.io/"/>
     <link rel="self" href="https://zhangtyzzz.github.io/atom.xml"/>
@@ -15,7 +15,7 @@
         <id>https://zhangtyzzz.github.io/post/tu/</id>
         <link href="https://zhangtyzzz.github.io/post/tu/">
         </link>
-        <updated>2020-08-19T00:01:07.000Z</updated>
+        <updated>2020-08-18T18:01:07.000Z</updated>
         <content type="html"><![CDATA[<h2 id="课程表"><a href="https://leetcode-cn.com/problems/course-schedule/">课程表</a></h2>
 <p><strong>leetcode 207题</strong><br>
 你这个学期必须选修 numCourse 门课程，记为 0 到 numCourse-1 。</p>
@@ -94,9 +94,7 @@ class Solution:
 </li>
 <li>若整个图 DFS 结束并未发现环，返回 True。</li>
 </ol>
-<pre><code class="language-python">from collections import deque
-
-class Solution:
+<pre><code class="language-python">class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -&gt; bool:
         # 标志位
         flags = [0 for _ in range(numCourses)]
