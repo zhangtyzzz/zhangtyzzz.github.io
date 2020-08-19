@@ -8,7 +8,7 @@
 <meta name="keywords" content="Gridea静态个人博客">
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
-<title>关于 | Tianyi的博客</title>
+<title>图 | Tianyi的博客</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1597820256052">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -48,8 +48,8 @@
 </script>
 
 
-  <meta name="description" content="关于" />
-  <meta name="keywords" content="" />
+  <meta name="description" content="图" />
+  <meta name="keywords" content="算法与数据结构" />
 </head>
 
 <body>
@@ -229,10 +229,16 @@
     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E5%85%B4%E8%B6%A3%E7%88%B1%E5%A5%BD">⛹ 兴趣爱好</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
+<li><a href="#%E8%AF%BE%E7%A8%8B%E8%A1%A8">课程表</a>
+<ul>
+<li><a href="#%E8%A7%A3%E6%B3%95">解法[^1]</a>
+<ul>
+<li><a href="#bfs">BFS</a></li>
+<li><a href="#dfs">DFS</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -500,8 +506,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://zhangtyzzz.github.io/post/about/">
-      关于
+    <a class="post-title-link" href="https://zhangtyzzz.github.io/post/tu/">
+      图
     </a>
   </h1>
   <div class="post-meta">
@@ -509,33 +515,192 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2019-01-25 12:09:48">2019-01-25</span>
+      <span class="publish-time" data-t="2020-08-19 02:01:07">2020-08-19</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
     <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">分类于</span>
+      
+      
+      <a href="https://zhangtyzzz.github.io/tag/iR0BvGFIm/">
+        <span>算法与数据结构</span>
+      </a>
+      
+      
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>1<span class="language" data-lan="minute">分钟</span></span>
+      <span>5<span class="language" data-lan="minute">分钟</span></span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>31<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>1037<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+              <h2 id="课程表"><a href="https://leetcode-cn.com/problems/course-schedule/">课程表</a></h2>
+<p><strong>leetcode 207题</strong><br>
+你这个学期必须选修 numCourse 门课程，记为 0 到 numCourse-1 。</p>
+<p>在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们：[0,1]</p>
+<p>给定课程总量以及它们的先决条件，请你判断是否可能完成所有课程的学习？</p>
+<h3 id="解法">解法<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h3>
+<p>利用拓扑排序判断课程安排图是否存在环。</p>
+<h4 id="bfs">BFS</h4>
+<ol>
+<li>统计课程安排图中每个节点的入度，生成 入度表 indegrees。</li>
+<li>借助一个队列 queue，将所有入度为 0 的节点入队。(可以理解为，不需要先修课程的课)</li>
+<li>当 queue 非空时，依次将队首节点出队，在课程安排图中删除此节点 pre：
+<ul>
+<li>并不是真正从邻接表中删除此节点 pre，而是将此节点对应所有邻接节点 cur 的入度 −1，即 indegrees[cur] -= 1。</li>
+<li>如果入度 −1后邻接节点 cur 的入度为 0，说明 cur 所有的前驱节点已经被 “删除”，此时将 cur 入队。(也可以理解为，先修课程已经被完成)</li>
+</ul>
+</li>
+<li>在每次 pre 出队时，执行 numCourses--；</li>
+</ol>
+<p>若整个课程安排图是有向无环图（即可以安排），则所有节点一定都入队并出队过，即完成拓扑排序。换个角度说，若课程安排图中存在环，一定有节点的入度始终不为 0。<br>
+因此，拓扑排序出队次数等于课程个数，返回 numCourses == 0 判断课程是否可以成功安排。</p>
+<pre><code class="language-python">from collections import deque
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -&gt; bool:
+        # 入度表
+        indegrees = [0 for _ in range(numCourses)]
+        # 邻接表
+        adjacency = [[] for _ in range(numCourses)]
+        queue = deque()
+        for requre in prerequisites:
+            pre = requre[1]
+            cur = requre[0]
+            # pre为cur的先修课程，所以cur的入度+1
+            indegrees[cur] += 1
+            # 存在pre指向cur的有向边，在邻接表中增加对应节点
+            adjacency[pre].append(cur)
+        for i,val in enumerate(indegrees):
+            # 遍历入度表，把入度为0的节点入队
+            if not val:
+                queue.append(i) 
+        while queue:
+            pre_course = queue.popleft()
+            # “删除”pre_course, pre_course对应的所有课程的入度减一
+            course_list = adjacency[pre_course]
+            for course in course_list:
+                indegrees[course] -= 1
+                # 假如存在环，比如[a,b],[b,a],[c,b] 第一次会把c入队，c的相邻节点为b，
+                # b即使减一也不为0，因为和a组成了环，所以可以这么判断
+                if not indegrees[course]:
+                    queue.append(course)
+            numCourses -= 1
+        return not numCourses
+</code></pre>
+<h4 id="dfs">DFS</h4>
+<ol>
+<li>借助一个标志列表 flags，用于判断每个节点 i （课程）的状态：
+<ul>
+<li>未被 DFS 访问：i == 0；</li>
+<li>已被其他节点启动的 DFS 访问：i == -1</li>
+<li>已被当前节点启动的 DFS 访问：i == 1。</li>
+</ul>
+</li>
+<li>对 numCourses 个节点依次执行 DFS，判断每个节点起步 DFS 是否存在环，若存在环直接返回 False。DFS 流程:
+<ol>
+<li>终止条件：
+<ul>
+<li>当 flag[i] == -1，说明当前访问节点已被其他节点启动的 DFS 访问，无需再重复搜索，直接返回 True。</li>
+<li>当 flag[i] == 1，说明在本轮 DFS 搜索中节点 i 被第 2 次访问，即课程安排图有环 ，直接返回 False。</li>
+</ul>
+</li>
+<li>将当前访问节点 i 对应 flag[i] 置 1，即标记其被本轮 DFS 访问过；</li>
+<li>递归访问当前节点 i 的所有邻接节点 j，当发现环直接返回 False；</li>
+<li>当前节点所有邻接节点已被遍历，并没有发现环，则将当前节点 flag 置为 −1 并返回 True</li>
+</ol>
+</li>
+<li>若整个图 DFS 结束并未发现环，返回 True。</li>
+</ol>
+<pre><code class="language-python">from collections import deque
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -&gt; bool:
+        # 标志位
+        flags = [0 for _ in range(numCourses)]
+        # 邻接表
+        adjacency = [[] for _ in range(numCourses)]
+        
+        for require in prerequisites:
+            pre = require[1]
+            cur = require[0]
+            adjacency[pre].append(cur)
+
+        def dfs(course):
+            if flags[course] == -1:
+                return True
+            elif flags[course] == 1:
+                return False
+            flags[course] = 1
+            # 遍历course的所有邻接节点
+            for tmp_course in adjacency[course]:
+                # 邻接节点里发现环就return False
+                if not dfs(tmp_course):
+                    return False
+            flags[course] = -1
+            return True
+
+        for i in range(numCourses):
+            # 任何一个节点发现环return False
+            if not dfs(i):
+                return False
+        return True
+</code></pre>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>https://leetcode-cn.com/problems/course-schedule/solution/course-schedule-tuo-bu-pai-xu-bfsdfsliang-chong-fa/ <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
 
             </div>
             
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Tianyi
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://zhangtyzzz.github.io/post/tu/" title="图">https://zhangtyzzz.github.io/post/tu/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://zhangtyzzz.github.io/tag/iR0BvGFIm/"># 算法与数据结构</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="HTTP和HTTPS总结" href="https://zhangtyzzz.github.io/post/http-he-https/">HTTP和HTTPS总结</a>
+        <a class="nav-mobile-next" title="HTTP和HTTPS总结" href="https://zhangtyzzz.github.io/post/http-he-https/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
             
             
   

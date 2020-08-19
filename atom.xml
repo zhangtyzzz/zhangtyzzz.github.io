@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhangtyzzz.github.io/</id>
     <title>Tianyi的博客</title>
-    <updated>2020-07-22T14:36:31.727Z</updated>
+    <updated>2020-08-19T06:57:41.854Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhangtyzzz.github.io/"/>
     <link rel="self" href="https://zhangtyzzz.github.io/atom.xml"/>
@@ -10,6 +10,133 @@
     <logo>https://zhangtyzzz.github.io/images/avatar.png</logo>
     <icon>https://zhangtyzzz.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Tianyi的博客</rights>
+    <entry>
+        <title type="html"><![CDATA[图]]></title>
+        <id>https://zhangtyzzz.github.io/post/tu/</id>
+        <link href="https://zhangtyzzz.github.io/post/tu/">
+        </link>
+        <updated>2020-08-19T00:01:07.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="课程表"><a href="https://leetcode-cn.com/problems/course-schedule/">课程表</a></h2>
+<p><strong>leetcode 207题</strong><br>
+你这个学期必须选修 numCourse 门课程，记为 0 到 numCourse-1 。</p>
+<p>在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们：[0,1]</p>
+<p>给定课程总量以及它们的先决条件，请你判断是否可能完成所有课程的学习？</p>
+<h3 id="解法">解法<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h3>
+<p>利用拓扑排序判断课程安排图是否存在环。</p>
+<h4 id="bfs">BFS</h4>
+<ol>
+<li>统计课程安排图中每个节点的入度，生成 入度表 indegrees。</li>
+<li>借助一个队列 queue，将所有入度为 0 的节点入队。(可以理解为，不需要先修课程的课)</li>
+<li>当 queue 非空时，依次将队首节点出队，在课程安排图中删除此节点 pre：
+<ul>
+<li>并不是真正从邻接表中删除此节点 pre，而是将此节点对应所有邻接节点 cur 的入度 −1，即 indegrees[cur] -= 1。</li>
+<li>如果入度 −1后邻接节点 cur 的入度为 0，说明 cur 所有的前驱节点已经被 “删除”，此时将 cur 入队。(也可以理解为，先修课程已经被完成)</li>
+</ul>
+</li>
+<li>在每次 pre 出队时，执行 numCourses--；</li>
+</ol>
+<p>若整个课程安排图是有向无环图（即可以安排），则所有节点一定都入队并出队过，即完成拓扑排序。换个角度说，若课程安排图中存在环，一定有节点的入度始终不为 0。<br>
+因此，拓扑排序出队次数等于课程个数，返回 numCourses == 0 判断课程是否可以成功安排。</p>
+<pre><code class="language-python">from collections import deque
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -&gt; bool:
+        # 入度表
+        indegrees = [0 for _ in range(numCourses)]
+        # 邻接表
+        adjacency = [[] for _ in range(numCourses)]
+        queue = deque()
+        for requre in prerequisites:
+            pre = requre[1]
+            cur = requre[0]
+            # pre为cur的先修课程，所以cur的入度+1
+            indegrees[cur] += 1
+            # 存在pre指向cur的有向边，在邻接表中增加对应节点
+            adjacency[pre].append(cur)
+        for i,val in enumerate(indegrees):
+            # 遍历入度表，把入度为0的节点入队
+            if not val:
+                queue.append(i) 
+        while queue:
+            pre_course = queue.popleft()
+            # “删除”pre_course, pre_course对应的所有课程的入度减一
+            course_list = adjacency[pre_course]
+            for course in course_list:
+                indegrees[course] -= 1
+                # 假如存在环，比如[a,b],[b,a],[c,b] 第一次会把c入队，c的相邻节点为b，
+                # b即使减一也不为0，因为和a组成了环，所以可以这么判断
+                if not indegrees[course]:
+                    queue.append(course)
+            numCourses -= 1
+        return not numCourses
+</code></pre>
+<h4 id="dfs">DFS</h4>
+<ol>
+<li>借助一个标志列表 flags，用于判断每个节点 i （课程）的状态：
+<ul>
+<li>未被 DFS 访问：i == 0；</li>
+<li>已被其他节点启动的 DFS 访问：i == -1</li>
+<li>已被当前节点启动的 DFS 访问：i == 1。</li>
+</ul>
+</li>
+<li>对 numCourses 个节点依次执行 DFS，判断每个节点起步 DFS 是否存在环，若存在环直接返回 False。DFS 流程:
+<ol>
+<li>终止条件：
+<ul>
+<li>当 flag[i] == -1，说明当前访问节点已被其他节点启动的 DFS 访问，无需再重复搜索，直接返回 True。</li>
+<li>当 flag[i] == 1，说明在本轮 DFS 搜索中节点 i 被第 2 次访问，即课程安排图有环 ，直接返回 False。</li>
+</ul>
+</li>
+<li>将当前访问节点 i 对应 flag[i] 置 1，即标记其被本轮 DFS 访问过；</li>
+<li>递归访问当前节点 i 的所有邻接节点 j，当发现环直接返回 False；</li>
+<li>当前节点所有邻接节点已被遍历，并没有发现环，则将当前节点 flag 置为 −1 并返回 True</li>
+</ol>
+</li>
+<li>若整个图 DFS 结束并未发现环，返回 True。</li>
+</ol>
+<pre><code class="language-python">from collections import deque
+
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -&gt; bool:
+        # 标志位
+        flags = [0 for _ in range(numCourses)]
+        # 邻接表
+        adjacency = [[] for _ in range(numCourses)]
+        
+        for require in prerequisites:
+            pre = require[1]
+            cur = require[0]
+            adjacency[pre].append(cur)
+
+        def dfs(course):
+            if flags[course] == -1:
+                return True
+            elif flags[course] == 1:
+                return False
+            flags[course] = 1
+            # 遍历course的所有邻接节点
+            for tmp_course in adjacency[course]:
+                # 邻接节点里发现环就return False
+                if not dfs(tmp_course):
+                    return False
+            flags[course] = -1
+            return True
+
+        for i in range(numCourses):
+            # 任何一个节点发现环return False
+            if not dfs(i):
+                return False
+        return True
+</code></pre>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>https://leetcode-cn.com/problems/course-schedule/solution/course-schedule-tuo-bu-pai-xu-bfsdfsliang-chong-fa/ <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[HTTP和HTTPS总结]]></title>
         <id>https://zhangtyzzz.github.io/post/http-he-https/</id>
