@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>HTTP和HTTPS总结 | Tianyi的博客</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1597820301707">
+<link rel="shortcut icon" href="/favicon.ico?v=1599122322057">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -194,7 +194,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">5</span>
+        <span class="site-item-stat-count">6</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -1527,6 +1527,151 @@ Cookie: sid=1342077140226724
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://zhangtyzzz.github.io/post/pattern-two-heaps/"" data-c="
+          &lt;h3 id=&#34;295-find-median-from-data-stream&#34;&gt;&lt;a href=&#34;https://leetcode-cn.com/problems/find-median-from-data-stream/&#34;&gt;295. Find Median from Data Stream&lt;/a&gt;&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;中位数是有序列表中间的数。如果列表长度是偶数，中位数则是中间两个数的平均值。设计一个支持以下两种操作的数据结构：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;void addNum(int num) - 从数据流中添加一个整数到数据结构中。&lt;/li&gt;
+&lt;li&gt;double findMedian() - 返回目前所有元素的中位数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;可以建立一个最大堆和一个最小堆，最大堆存储列表中较小的半部分，最小堆存储较大的那半部分。求中位数时就可以直接计算得出。&lt;/p&gt;
+&lt;p&gt;主要是在插入元素时，如果新的元素比最大堆的最大值要小，就应该加入最大堆，因为要扩展更小的那半部分。由于python中堆默认是最小堆，所以加了负号来建立最大堆。&lt;/p&gt;
+&lt;p&gt;元素插入完成之后检查两个堆的元素数量，如果某个堆元素数量比另一个多一个以上就需要平衡。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import heapq
+class MedianFinder:
+
+    def __init__(self):
+        &amp;quot;&amp;quot;&amp;quot;
+        initialize your data structure here.
+        &amp;quot;&amp;quot;&amp;quot;
+        # 最小堆存储较大的那一半
+        self.min_heap = []
+        # 最大堆用于存储数据集中较小的那一半
+        self.max_heap = []
+        
+
+    def addNum(self, num: int) -&amp;gt; None:
+        if not self.min_heap and not self.max_heap:
+            heapq.heappush(self.max_heap,-num)
+        # 比如3,1,5,4 最大堆里存储的应该是-3，-1，最开始进入的是-3，-1&amp;gt;=-3
+        # 也就是说如果新的数据的反比最大堆里最大的还要大，说明新数据更小，要加入最大堆
+        elif -num &amp;gt;= self.max_heap[0]:
+            heapq.heappush(self.max_heap,-num)
+        else:
+            heapq.heappush(self.min_heap,num)
+        
+        n1 = len(self.min_heap)
+        n2 = len(self.max_heap)
+
+        if n2-n1 &amp;gt;= 2:
+            heapq.heappush(self.min_heap,-heapq.heappop(self.max_heap))
+        elif n1-n2&amp;gt;=2:
+            heapq.heappush(self.max_heap,-heapq.heappop(self.min_heap))
+
+    def findMedian(self) -&amp;gt; float:
+        n1 = len(self.min_heap)
+        n2 = len(self.max_heap)
+        if n1 &amp;gt; n2:
+            return self.min_heap[0]
+        elif n1 &amp;lt; n2:
+            return -self.max_heap[0]
+        else:
+            return (self.min_heap[0]-self.max_heap[0])/2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;480-sliding-window-median&#34;&gt;&lt;a href=&#34;https://leetcode-cn.com/problems/sliding-window-median/&#34;&gt;480. Sliding Window Median&lt;/a&gt;&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;给你一个数组 nums，有一个大小为 k 的窗口从最左端滑动到最右端。窗口中有 k 个数，每次窗口向右移动 1 位。你的任务是找出每次窗口移动后得到的新窗口中元素的中位数，并输出由它们组成的数组。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;和上题类似，只是滑动窗口需要进行元素的删除操作，问题是删除元素之后重新对堆做平衡的复杂度是O(n)，可以看一下题解有没有更好的写法&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from heapq import *
+class Solution:
+    def medianSlidingWindow(self, nums, k):
+        max_heap = []
+        min_heap = []
+
+        def remove(num, heap):
+            # 查找元素位置,交换到末位再删降低复杂度
+            del_idx = heap.index(num)
+            heap[-1], heap[del_idx] = heap[del_idx], heap[-1]
+            heap.pop()
+            # 这一步还是O(n)的复杂度，有点问题
+            heapify(heap)
+            return heap
+
+        def find_mid(min_heap, max_heap):
+            if len(max_heap) &amp;gt; len(min_heap):
+                return -max_heap[0]
+            else:
+                return (min_heap[0] - max_heap[0]) / 2
+
+        def balance(min_heap,max_heap):
+            n_max = len(max_heap)
+            n_min = len(min_heap)
+
+            if n_max - n_min &amp;gt; 1:
+                heappush(min_heap, -heappop(max_heap))
+            # 这里是保证max_heap的数据量大于等于min_heap
+            # 因为删除元素的时候max_heap可能被删除到空，
+            # 此时添加元素会直接添加到max_heap里去，
+            # 可能出现min_heap里的元素反而比max_heap里的小的情况
+            elif n_min  &amp;gt;  n_max:
+                heappush(max_heap, -heappop(min_heap))
+            return min_heap,max_heap
+
+        ans = []
+        for i, num in enumerate(nums):
+            if not max_heap or -num &amp;gt;= max_heap[0]:
+                heappush(max_heap, -num)
+            else:
+                heappush(min_heap, num)
+  
+            min_heap,max_heap = balance(min_heap,max_heap)
+            n_max = len(max_heap)
+            n_min = len(min_heap)
+
+            if n_max + n_min &amp;gt; k:
+                num_remove = nums[i - k]
+                if -num_remove &amp;gt;= max_heap[0]:
+                    max_heap = remove(-num_remove, max_heap)
+                else:
+                    min_heap = remove(num_remove, min_heap)
+                # 因为进行了删除操作，需要重新对堆做平衡
+                min_heap, max_heap = balance(min_heap, max_heap)
+
+
+            if i &amp;gt;= k-1:
+                ans.append(find_mid(min_heap, max_heap))
+
+        return ans
+&lt;/code&gt;&lt;/pre&gt;
+">Pattern Two Heaps</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://zhangtyzzz.github.io/post/mian-shi-ti-liu-lan-qi-shu-ru-url-zhi-hou-fa-sheng-liao-shi-me/"" data-c="
+          &lt;h3 id=&#34;dns解析&#34;&gt;DNS解析&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;查找浏览器缓存&lt;/li&gt;
+&lt;li&gt;查找系统缓存，查看本地的hosts文件&lt;/li&gt;
+&lt;li&gt;路由缓存&lt;/li&gt;
+&lt;li&gt;发送DNS请求到本地DNS服务器，递归查询&lt;/li&gt;
+&lt;li&gt;本地DNS服务器向根服务器发出请求，根服务器缓存里没有找到，会把对应的顶级域服务器的IP返回给本地DNS服务器&lt;/li&gt;
+&lt;li&gt;迭代查询，直到找到对应的IP&lt;br&gt;
+&lt;img src=&#34;https://zhangtyzzz.github.io//post-images/1598969916840.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+上图展示了DNS服务器的层次结构：根(root)DNS服务器，顶级域(top-level domain)DNS服务器，权威(authoritative)DNS服务器&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;建立tcp连接三次握手&#34;&gt;建立TCP连接，三次握手&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;客户端将标志位SYN置为1，&lt;/li&gt;
+&lt;/ol&gt;
+">面试题：浏览器输入URL之后发生了什么</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://zhangtyzzz.github.io/post/tu/"" data-c="

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhangtyzzz.github.io/</id>
     <title>Tianyi的博客</title>
-    <updated>2020-08-19T06:58:43.978Z</updated>
+    <updated>2020-09-03T08:38:48.188Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhangtyzzz.github.io/"/>
     <link rel="self" href="https://zhangtyzzz.github.io/atom.xml"/>
@@ -10,6 +10,134 @@
     <logo>https://zhangtyzzz.github.io/images/avatar.png</logo>
     <icon>https://zhangtyzzz.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Tianyi的博客</rights>
+    <entry>
+        <title type="html"><![CDATA[Pattern Two Heaps]]></title>
+        <id>https://zhangtyzzz.github.io/post/pattern-two-heaps/</id>
+        <link href="https://zhangtyzzz.github.io/post/pattern-two-heaps/">
+        </link>
+        <updated>2020-09-03T02:37:02.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="295-find-median-from-data-stream"><a href="https://leetcode-cn.com/problems/find-median-from-data-stream/">295. Find Median from Data Stream</a></h3>
+<blockquote>
+<p>中位数是有序列表中间的数。如果列表长度是偶数，中位数则是中间两个数的平均值。设计一个支持以下两种操作的数据结构：</p>
+<ul>
+<li>void addNum(int num) - 从数据流中添加一个整数到数据结构中。</li>
+<li>double findMedian() - 返回目前所有元素的中位数。</li>
+</ul>
+</blockquote>
+<p><strong>解法：</strong></p>
+<p>可以建立一个最大堆和一个最小堆，最大堆存储列表中较小的半部分，最小堆存储较大的那半部分。求中位数时就可以直接计算得出。</p>
+<p>主要是在插入元素时，如果新的元素比最大堆的最大值要小，就应该加入最大堆，因为要扩展更小的那半部分。由于python中堆默认是最小堆，所以加了负号来建立最大堆。</p>
+<p>元素插入完成之后检查两个堆的元素数量，如果某个堆元素数量比另一个多一个以上就需要平衡。</p>
+<pre><code class="language-python">import heapq
+class MedianFinder:
+
+    def __init__(self):
+        &quot;&quot;&quot;
+        initialize your data structure here.
+        &quot;&quot;&quot;
+        # 最小堆存储较大的那一半
+        self.min_heap = []
+        # 最大堆用于存储数据集中较小的那一半
+        self.max_heap = []
+        
+
+    def addNum(self, num: int) -&gt; None:
+        if not self.min_heap and not self.max_heap:
+            heapq.heappush(self.max_heap,-num)
+        # 比如3,1,5,4 最大堆里存储的应该是-3，-1，最开始进入的是-3，-1&gt;=-3
+        # 也就是说如果新的数据的反比最大堆里最大的还要大，说明新数据更小，要加入最大堆
+        elif -num &gt;= self.max_heap[0]:
+            heapq.heappush(self.max_heap,-num)
+        else:
+            heapq.heappush(self.min_heap,num)
+        
+        n1 = len(self.min_heap)
+        n2 = len(self.max_heap)
+
+        if n2-n1 &gt;= 2:
+            heapq.heappush(self.min_heap,-heapq.heappop(self.max_heap))
+        elif n1-n2&gt;=2:
+            heapq.heappush(self.max_heap,-heapq.heappop(self.min_heap))
+
+    def findMedian(self) -&gt; float:
+        n1 = len(self.min_heap)
+        n2 = len(self.max_heap)
+        if n1 &gt; n2:
+            return self.min_heap[0]
+        elif n1 &lt; n2:
+            return -self.max_heap[0]
+        else:
+            return (self.min_heap[0]-self.max_heap[0])/2
+</code></pre>
+<h3 id="480-sliding-window-median"><a href="https://leetcode-cn.com/problems/sliding-window-median/">480. Sliding Window Median</a></h3>
+<blockquote>
+<p>给你一个数组 nums，有一个大小为 k 的窗口从最左端滑动到最右端。窗口中有 k 个数，每次窗口向右移动 1 位。你的任务是找出每次窗口移动后得到的新窗口中元素的中位数，并输出由它们组成的数组。</p>
+</blockquote>
+<p><strong>解法：</strong></p>
+<p>和上题类似，只是滑动窗口需要进行元素的删除操作，问题是删除元素之后重新对堆做平衡的复杂度是O(n)，可以看一下题解有没有更好的写法</p>
+<pre><code class="language-python">from heapq import *
+class Solution:
+    def medianSlidingWindow(self, nums, k):
+        max_heap = []
+        min_heap = []
+
+        def remove(num, heap):
+            # 查找元素位置,交换到末位再删降低复杂度
+            del_idx = heap.index(num)
+            heap[-1], heap[del_idx] = heap[del_idx], heap[-1]
+            heap.pop()
+            # 这一步还是O(n)的复杂度，有点问题
+            heapify(heap)
+            return heap
+
+        def find_mid(min_heap, max_heap):
+            if len(max_heap) &gt; len(min_heap):
+                return -max_heap[0]
+            else:
+                return (min_heap[0] - max_heap[0]) / 2
+
+        def balance(min_heap,max_heap):
+            n_max = len(max_heap)
+            n_min = len(min_heap)
+
+            if n_max - n_min &gt; 1:
+                heappush(min_heap, -heappop(max_heap))
+            # 这里是保证max_heap的数据量大于等于min_heap
+            # 因为删除元素的时候max_heap可能被删除到空，
+            # 此时添加元素会直接添加到max_heap里去，
+            # 可能出现min_heap里的元素反而比max_heap里的小的情况
+            elif n_min  &gt;  n_max:
+                heappush(max_heap, -heappop(min_heap))
+            return min_heap,max_heap
+
+        ans = []
+        for i, num in enumerate(nums):
+            if not max_heap or -num &gt;= max_heap[0]:
+                heappush(max_heap, -num)
+            else:
+                heappush(min_heap, num)
+  
+            min_heap,max_heap = balance(min_heap,max_heap)
+            n_max = len(max_heap)
+            n_min = len(min_heap)
+
+            if n_max + n_min &gt; k:
+                num_remove = nums[i - k]
+                if -num_remove &gt;= max_heap[0]:
+                    max_heap = remove(-num_remove, max_heap)
+                else:
+                    min_heap = remove(num_remove, min_heap)
+                # 因为进行了删除操作，需要重新对堆做平衡
+                min_heap, max_heap = balance(min_heap, max_heap)
+
+
+            if i &gt;= k-1:
+                ans.append(find_mid(min_heap, max_heap))
+
+        return ans
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[图]]></title>
         <id>https://zhangtyzzz.github.io/post/tu/</id>
