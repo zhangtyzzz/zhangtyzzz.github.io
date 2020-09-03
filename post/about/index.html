@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>关于 | Tianyi的博客</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1599122322057">
+<link rel="shortcut icon" href="/favicon.ico?v=1599137548001">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1133,6 +1133,106 @@ class Solution:
             if i &amp;gt;= k-1:
                 ans.append(find_mid(min_heap, max_heap))
 
+        return ans
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;502-ipo&#34;&gt;&lt;a href=&#34;https://leetcode-cn.com/problems/ipo/&#34;&gt;502. IPO&lt;/a&gt;&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;假设 力扣（LeetCode）即将开始其 IPO。为了以更高的价格将股票卖给风险投资公司，力扣 希望在 IPO 之前开展一些项目以增加其资本。 由于资源有限，它只能在 IPO 之前完成最多 k 个不同的项目。帮助 力扣 设计完成最多 k 个不同项目后得到最大总资本的方式。&lt;br&gt;
+给定若干个项目。对于每个项目 i，它都有一个纯利润 Pi，并且需要最小的资本 Ci 来启动相应的项目。最初，你有 W 资本。当你完成一个项目时，你将获得纯利润，且利润将被添加到你的总资本中。&lt;/p&gt;
+&lt;p&gt;总而言之，从给定项目中选择最多 k 个不同项目的列表，以最大化最终资本，并输出最终可获得的最多资本。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;解法：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;贪心算法，从能承受的项目里选择利润最高的那个。需要知道能承受的项目有什么，然后能承受的项目里利润最高的是哪些。同样可以用最大最小堆来做。首先把所有的项目所需的资本建立一个最小堆，然后逐个pop，把能承受的项目的利润建立一个最大堆，每次选择利润最大的那个项目。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from heapq import *
+class Solution:
+    def findMaximizedCapital(self, k, W, Profits, Capital):
+        # 可以加速运算，如果初始可用资本就可以承受所有项目直接选择利润最大的k个即可
+        if W &amp;gt;= max(Capital):
+            return W + sum(nlargest(k, Profits))
+        # 资本最小堆和利润最大堆
+        capital_minheap = []
+        profit_maxheap = []
+
+        # 首先构建资本最小堆
+        for i in range(len(Capital)):
+            # 注意把资本和对应的位置绑定，方便后续找对应利润
+            heappush(capital_minheap,(Capital[i],i))
+        # 初始可用资本
+        available_capital = W
+        # 最多k次
+        for _ in range(k):
+            # 找到当前可用资本下可以选择的所有项目，然后用他们的利润构建最大堆
+            while capital_minheap and capital_minheap[0][0] &amp;lt;= available_capital:
+                capital,i = heappop(capital_minheap)
+                # 构建利润最大堆
+                heappush(profit_maxheap,-Profits[i])
+            # 如果利润最大堆为空，说明当前资本什么都买不了，跳出
+            if not profit_maxheap: break
+            # 选择利润最大的项目，增加可用资本
+            available_capital += -heappop(profit_maxheap)
+        
+        return available_capital
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;436-find-right-interval&#34;&gt;&lt;a href=&#34;https://leetcode-cn.com/problems/find-right-interval/&#34;&gt;436. Find Right Interval&lt;/a&gt;&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;给定一组区间，对于每一个区间 i，检查是否存在一个区间 j，它的起始点大于或等于区间 i 的终点，这可以称为 j 在 i 的“右侧”。&lt;/p&gt;
+&lt;p&gt;对于任何区间，你需要存储的满足条件的区间 j 的最小索引，这意味着区间 j 有最小的起始点可以使其成为“右侧”区间。如果区间 j 不存在，则将区间 i 存储为 -1。最后，你需要输出一个值为存储的区间值的数组。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;解法1：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;因为要找的是当前终点对应的最小起点，所以直接对起点排序，然后二分查找起点的位置即可。对应代码&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;class Solution:
+    def findRightInterval(self, intervals):
+        # 记录每个区间对应的索引
+        tmp_intervals = [(interval[0],i) for i,interval in enumerate(intervals)]
+        # 按照起点排序
+        left_interval = sorted(tmp_intervals,key=lambda x:x[0])
+        n = len(intervals)
+        # 二分查找函数
+        def divide_find(val):
+            i = 0
+            j = n
+            if left_interval[j-1][0] &amp;lt; val: return -1
+            while i&amp;lt;j:
+                mid = i+(j-i)//2
+                if left_interval[mid][0] &amp;gt; val:
+                    j = mid
+                elif left_interval[mid][0] &amp;lt; val:
+                    i = mid+1
+                else:
+                    return left_interval[mid][1]
+            return left_interval[i][1]
+        ans = []
+        for interval in intervals:
+            num_to_find = interval[1]
+            ans.append(divide_find(num_to_find))
+        return ans
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;解法2：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;利用两个最大堆，一个最大堆记录起点，一个记录终点。从大到小寻找当前终点对应的起点&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from heapq import *
+class Solution:
+    def findRightInterval(self, intervals):
+        n = len(intervals)
+        max_start = []
+        max_end = []
+        ans = [0] * n
+        for i,interval in enumerate(intervals):
+            heappush(max_start,(-interval[0],i))
+            heappush(max_end,(-interval[1],i))
+        for _ in range(n):
+            # 当前的最大终点
+            top_end,end_idx = heappop(max_end)
+            # 先设定好找不到为-1
+            start_idx = -1
+            # 如果当前最大的起点比终点大，pop出来，直到当前最大起点比终点小为止
+            # 最后pop出的起点就是对应的右区间
+            while max_start and -max_start[0][0] &amp;gt;= -top_end:
+                top_start,start_idx = heappop(max_start)
+            ans[end_idx] = start_idx
+            # 因为当前的右区间可能还是其它终点的右区间，所以要把这个加回去
+            # 多pop出来的就不可能是其它终点的右区间了
+            # 因为更大的终点对应的右区间已经找出来，其它的终点右区间只会更小而不会更大
+            if start_idx!=-1: heappush(max_start,(top_start,start_idx))
         return ans
 &lt;/code&gt;&lt;/pre&gt;
 ">Pattern Two Heaps</a>
