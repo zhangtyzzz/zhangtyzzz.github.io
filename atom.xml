@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhangtyzzz.github.io/</id>
     <title>Tianyi的博客</title>
-    <updated>2020-09-03T12:52:34.159Z</updated>
+    <updated>2020-09-28T09:02:58.179Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhangtyzzz.github.io/"/>
     <link rel="self" href="https://zhangtyzzz.github.io/atom.xml"/>
@@ -10,6 +10,85 @@
     <logo>https://zhangtyzzz.github.io/images/avatar.png</logo>
     <icon>https://zhangtyzzz.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Tianyi的博客</rights>
+    <entry>
+        <title type="html"><![CDATA[Pattern Sliding Window]]></title>
+        <id>https://zhangtyzzz.github.io/post/pattern-sliding-window/</id>
+        <link href="https://zhangtyzzz.github.io/post/pattern-sliding-window/">
+        </link>
+        <updated>2020-09-28T03:02:04.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="209-长度最小的子数组"><a href="https://leetcode-cn.com/problems/minimum-size-subarray-sum/">209. 长度最小的子数组</a></h3>
+<blockquote>
+<p>给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的连续子数组，并返回其长度。如果不存在符合条件的子数组，返回 0。</p>
+</blockquote>
+<h4 id="解法">解法</h4>
+<p>滑动窗口大小可变，每次添加一个元素进去，如果此时总和大于s，开始从窗口开头去除元素直到窗口总和不再大于s。</p>
+<h5 id="java代码">Java代码</h5>
+<pre><code class="language-java">class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        int minLength = Integer.MAX_VALUE,windowStart = 0;
+        int curSum = 0;
+        for (int windowEnd = 0; windowEnd &lt; nums.length; windowEnd++) {
+            curSum += nums[windowEnd];
+            if(curSum &gt;= s){
+                while(curSum - nums[windowStart] &gt;= s){
+                    curSum -= nums[windowStart];
+                    windowStart++;
+                }
+                minLength = Math.min(minLength,windowEnd - windowStart + 1);
+            }
+        }
+        return minLength == Integer.MAX_VALUE ? 0 : minLength;
+    }
+}
+</code></pre>
+<h3 id="3-无重复字符的最长子串"><a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">3. 无重复字符的最长子串</a></h3>
+<blockquote>
+<p>给定一个字符串，请你找出其中不含有重复字符的 <strong>最长子串</strong> 的长度。</p>
+</blockquote>
+<h4 id="解法1">解法1</h4>
+<p>使用HashSet记录当前滑动窗口内包含的元素，保证没有重复。出现HashSet中已有的元素时开始从左边缩减窗口。</p>
+<h5 id="java代码-2">Java代码</h5>
+<pre><code class="language-java">class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int maxLength = 0, windowStart = 0;
+        HashSet&lt;Character&gt; helperSet = new HashSet&lt;Character&gt;();
+        for (int windowEnd = 0; windowEnd &lt; s.length(); windowEnd++) {
+            char endChar = s.charAt(windowEnd);
+            while (helperSet.contains(endChar)){
+                helperSet.remove(s.charAt(windowStart));
+                windowStart ++ ;
+            }
+            helperSet.add(s.charAt(windowEnd));
+            maxLength = Math.max(maxLength,windowEnd-windowStart+1);
+        }
+        return maxLength;
+    }
+}
+</code></pre>
+<h4 id="解法2">解法2</h4>
+<p><a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/solution/hua-jie-suan-fa-3-wu-zhong-fu-zi-fu-de-zui-chang-z/">题解</a>里看到的另一种方法，使用HashMap，可以在有重复元素的时候不必一个个删除，直接移动窗口左边界</p>
+<pre><code class="language-java">class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int n = s.length(), ans = 0;
+        Map&lt;Character, Integer&gt; map = new HashMap&lt;&gt;();
+        for (int end = 0, start = 0; end &lt; n; end++) {
+            char alpha = s.charAt(end);
+            if (map.containsKey(alpha)) {
+                // 发现HashMap里有当前元素，检查它所在的位置，如果位置在start的左边，
+                // 那说明当前窗口里并不包括包括这项元素，这里的加一是为了保证重复元素不在滑动窗口里
+                // 因为HashMap只添加没有删除的操作，所以里边会包括当前窗口里没有的元素。
+                start = Math.max(map.get(alpha) + 1, start);
+            }
+            ans = Math.max(ans, end - start + 1);
+            // 把当前元素和对应的位置加入
+            map.put(s.charAt(end), end);
+        }
+        return ans;
+    }
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Pattern Two Heaps]]></title>
         <id>https://zhangtyzzz.github.io/post/pattern-two-heaps/</id>

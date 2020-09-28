@@ -9,7 +9,7 @@
 <meta name="description" content="温故而知新">
 <meta name="theme-color" content="#000">
 <title>面试题：浏览器输入URL之后发生了什么 | Tianyi的博客</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1599137548001">
+<link rel="shortcut icon" href="/favicon.ico?v=1601283772120">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -194,7 +194,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">6</span>
+        <span class="site-item-stat-count">7</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -1050,6 +1050,82 @@
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://zhangtyzzz.github.io/post/pattern-sliding-window/"" data-c="
+          &lt;h3 id=&#34;209-长度最小的子数组&#34;&gt;&lt;a href=&#34;https://leetcode-cn.com/problems/minimum-size-subarray-sum/&#34;&gt;209. 长度最小的子数组&lt;/a&gt;&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的连续子数组，并返回其长度。如果不存在符合条件的子数组，返回 0。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;解法&#34;&gt;解法&lt;/h4&gt;
+&lt;p&gt;滑动窗口大小可变，每次添加一个元素进去，如果此时总和大于s，开始从窗口开头去除元素直到窗口总和不再大于s。&lt;/p&gt;
+&lt;h5 id=&#34;java代码&#34;&gt;Java代码&lt;/h5&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        int minLength = Integer.MAX_VALUE,windowStart = 0;
+        int curSum = 0;
+        for (int windowEnd = 0; windowEnd &amp;lt; nums.length; windowEnd++) {
+            curSum += nums[windowEnd];
+            if(curSum &amp;gt;= s){
+                while(curSum - nums[windowStart] &amp;gt;= s){
+                    curSum -= nums[windowStart];
+                    windowStart++;
+                }
+                minLength = Math.min(minLength,windowEnd - windowStart + 1);
+            }
+        }
+        return minLength == Integer.MAX_VALUE ? 0 : minLength;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;3-无重复字符的最长子串&#34;&gt;&lt;a href=&#34;https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/&#34;&gt;3. 无重复字符的最长子串&lt;/a&gt;&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;给定一个字符串，请你找出其中不含有重复字符的 &lt;strong&gt;最长子串&lt;/strong&gt; 的长度。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;解法1&#34;&gt;解法1&lt;/h4&gt;
+&lt;p&gt;使用HashSet记录当前滑动窗口内包含的元素，保证没有重复。出现HashSet中已有的元素时开始从左边缩减窗口。&lt;/p&gt;
+&lt;h5 id=&#34;java代码-2&#34;&gt;Java代码&lt;/h5&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int maxLength = 0, windowStart = 0;
+        HashSet&amp;lt;Character&amp;gt; helperSet = new HashSet&amp;lt;Character&amp;gt;();
+        for (int windowEnd = 0; windowEnd &amp;lt; s.length(); windowEnd++) {
+            char endChar = s.charAt(windowEnd);
+            while (helperSet.contains(endChar)){
+                helperSet.remove(s.charAt(windowStart));
+                windowStart ++ ;
+            }
+            helperSet.add(s.charAt(windowEnd));
+            maxLength = Math.max(maxLength,windowEnd-windowStart+1);
+        }
+        return maxLength;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;解法2&#34;&gt;解法2&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&#34;https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/solution/hua-jie-suan-fa-3-wu-zhong-fu-zi-fu-de-zui-chang-z/&#34;&gt;题解&lt;/a&gt;里看到的另一种方法，使用HashMap，可以在有重复元素的时候不必一个个删除，直接移动窗口左边界&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int n = s.length(), ans = 0;
+        Map&amp;lt;Character, Integer&amp;gt; map = new HashMap&amp;lt;&amp;gt;();
+        for (int end = 0, start = 0; end &amp;lt; n; end++) {
+            char alpha = s.charAt(end);
+            if (map.containsKey(alpha)) {
+                // 发现HashMap里有当前元素，检查它所在的位置，如果位置在start的左边，
+                // 那说明当前窗口里并不包括包括这项元素，这里的加一是为了保证重复元素不在滑动窗口里
+                // 因为HashMap只添加没有删除的操作，所以里边会包括当前窗口里没有的元素。
+                start = Math.max(map.get(alpha) + 1, start);
+            }
+            ans = Math.max(ans, end - start + 1);
+            // 把当前元素和对应的位置加入
+            map.put(s.charAt(end), end);
+        }
+        return ans;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+">Pattern Sliding Window</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://zhangtyzzz.github.io/post/pattern-two-heaps/"" data-c="
